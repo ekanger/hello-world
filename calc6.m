@@ -32,7 +32,7 @@ end
 % x_hat = [0;0;0;0]
 x = [0;0;0;0];
 
-iterations=20;
+iterations=1;
  deltaP=zeros(8,1);
  P_hat = zeros(8,1);
  deltaX=zeros(4,1);
@@ -41,10 +41,15 @@ iterations=20;
 % saving the dataset;
 sol =zeros(4,iterations);
 sol_inside =zeros(4,iterations*10);
-time = [0:0.5:iterations/2];
+newTime=zeros(1,iterations);
+error = zeros(3,iterations);
+
 for i=1:iterations
     %saving new measurement for each time step/iteration....
          sol(:,i)=x;
+         newTime (i) =Tow(i)-521145.5;
+         
+      
          
          %iterating 10 times for each time step.
              for k = 1:10
@@ -55,7 +60,7 @@ for i=1:iterations
                                                            end
 
                                                            for j=1:8
-                                                           P_hat (j) =  ro(j)+x(4)^2;
+                                                           P_hat (j) =  ro(j)+c*x(4);
                                                            end
                                                            deltaP = P_hat - newPR(:,i)
 
@@ -75,10 +80,13 @@ for i=1:iterations
                                                             x(1) = x(1) + deltaX(1);
                                                             x(2) = x(2) + deltaX(2);
                                                             x(3) = x(3) + deltaX(3);
-                                                            x(4) = x(4) - deltaX(4);
+                                                            x(4) = x(4) - deltaX(4)/c;
 
              end
 end
 
 
-
+% plot(newTime,sol(1,:))
+% hold on 
+% plot(newTime,P0(1))
+plot(newTime,error(1))
